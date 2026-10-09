@@ -2,11 +2,12 @@ import asyncio
 import os
 import random
 from collections.abc import Sequence
-from typing import Literal, Optional, TypedDict
+from typing import Dict, List, Literal, Optional, TypedDict
 
 from dotenv import load_dotenv
 from langchain.agents import AgentState, create_agent
 
+############################################
 # from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
@@ -171,7 +172,7 @@ def chat_loop():  # A
         if user_input.lower() in {"exit", "quit"}:  # C
             break
         state: AgentState = {"messages": [HumanMessage(content=user_input)]}  # D
-        result = travel_info_agent.invoke(state)  # E
+        result = accommodation_booking_agent.invoke(state)  # E
         response_msg = result["messages"][-1]  # F
         print(f"Assistant: {response_msg.text}\n")  # G
 
@@ -501,6 +502,26 @@ def check_bnb_availability(destination: str, num_rooms: int) -> List[Dict]:  # B
 
 # A Define the BnB availability tool
 # B Define the input and return type of the BnB availability tool
+
+
+# -----------------------------------------------------------------------------
+# Accommodation Booking Agent
+# -----------------------------------------------------------------------------
+BOOKING_TOOLS = hotel_db_toolkit_tools + [check_bnb_availability]  # A
+
+accommodation_booking_agent = create_agent(  # B
+    model=llm_model,
+    tools=BOOKING_TOOLS,
+    system_prompt="""You are a helpful assistant that can check 
+    hotel and BnB room availability and price for a
+    destination in Cornwall. You can use the tools to 
+    get the information you need. If the users does 
+    not specify the accommodation type, you should 
+    check both hotels and BnBs.""",
+)
+
+# A Define the booking tools, which are the tools from the hotel database toolkit and the BnB availability tool
+# B Create the accommodation booking agent
 
 
 if __name__ == "__main__":
