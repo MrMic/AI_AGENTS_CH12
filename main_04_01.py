@@ -20,7 +20,6 @@ from langchain_core.messages import (
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langgraph.graph import StateGraph
 from langgraph.prebuilt import tools_condition
 
 load_dotenv()
