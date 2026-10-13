@@ -8,7 +8,6 @@ from typing import Annotated, Dict, List, Literal, Optional, TypedDict
 
 from dotenv import load_dotenv
 from langchain.agents import AgentState, create_agent
-
 ############################################
 # from langchain_community.vectorstores import Chroma
 from langchain_chroma import Chroma
@@ -16,11 +15,7 @@ from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
 from langchain_community.utilities.sql_database import SQLDatabase
-from langchain_core.messages import (
-    BaseMessage,
-    HumanMessage,
-    SystemMessage,
-)
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -241,31 +236,6 @@ travel_info_agent = create_agent(
     system_prompt="""You are a helpful assistant that can search travel information and get the weather forecast.
     Only use the tools to find the information you need (including town names).""",
 )
-
-# ----------------------------------------------------------------------------
-# 5. Simple CLI interface
-# ----------------------------------------------------------------------------
-
-
-def chat_loop():  # A
-    print("UK Travel Assistant (type 'exit' to quit)")
-    while True:
-        user_input = input("You: ").strip()  # B
-        if user_input.lower() in {"exit", "quit"}:  # C
-            break
-        state: AgentState = {"messages": [HumanMessage(content=user_input)]}  # D
-        result = accommodation_booking_agent.invoke(state)  # E
-        response_msg = result["messages"][-1]  # F
-        print(f"Assistant: {response_msg.text}\n")  # G
-
-
-# A Define the chat loop
-# B Get the user input
-# C Check if the user input is "exit" or "quit" to exit the loop
-# D Create the initial state with a HumanMessage containing the user input
-# E Invoke the graph with the initial state
-# F Get the last message from the result, which contains the final answer
-# G Print the assistant's final answer, from the content of the last message
 
 
 # -----------------------------------------------------------------------------
@@ -604,6 +574,55 @@ accommodation_booking_agent = create_agent(  # B
 
 # A Define the booking tools, which are the tools from the hotel database toolkit and the BnB availability tool
 # B Create the accommodation booking agent
+
+
+# -----------------------------------------------------------------------------
+# Build the LangGraph graph with router, travel_info_agent, and accommodation_booking_agent
+# -----------------------------------------------------------------------------
+graph = StateGraph(AgentState)  # A
+graph.add_node("router_agent", router_agent_node)  # B
+graph.add_node("travel_info_agent", travel_info_agent)  # C
+graph.add_node("accommodation_booking_agent", accommodation_booking_agent)  # D
+
+graph.add_edge("travel_info_agent", END)  # E
+graph.add_edge("accommodation_booking_agent", END)  # F
+
+graph.set_entry_point("router_agent")  # G
+travel_assistant = graph.compile()  # H
+
+# A Define the graph
+# B Add the router agent node
+# C Add the travel info agent node
+# D Add the accommodation booking agent node
+# E Add the edge from the travel info agent to the end
+# F Add the edge from the accommodation booking agent to the end
+# G Set the entry point to the router agent
+# H Compile the graph
+
+
+# ----------------------------------------------------------------------------
+# 5. Simple CLI interface
+# ----------------------------------------------------------------------------
+
+def chat_loop():  # A
+    print("UK Travel Assistant (type 'exit' to quit)")
+    while True:
+        user_input = input("You: ").strip()  # B
+        if user_input.lower() in {"exit", "quit"}:  # C
+            break
+        state = {"messages": [HumanMessage(content=user_input)]}  # D
+        result = travel_assistant.invoke(state)  # E
+        response_msg = result["messages"][-1]  # F
+        print(f"Assistant: {response_msg.content}\n")  # G
+
+
+# A Define the chat loop
+# B Get the user input
+# C Check if the user input is "exit" or "quit" to exit the loop
+# D Create the initial state with a HumanMessage containing the user input
+# E Invoke the graph with the initial state
+# F Get the last message from the result, which contains the final answer
+# G Print the assistant's final answer, from the content of the last message
 
 
 if __name__ == "__main__":
