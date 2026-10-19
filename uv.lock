@@ -677,7 +677,7 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.14.3" },
     { name = "beautifulsoup4", specifier = ">=4.15.0" },
     { name = "chromadb", specifier = ">=1.5.9" },
-    { name = "fastmcp", specifier = ">=4.0.4" },
+    { name = "fastmcp", specifier = ">=3,<4" },
     { name = "html2text", specifier = ">=2025.4.15" },
     { name = "langchain", specifier = ">=1.4.0" },
     { name = "langchain-chroma", specifier = ">=1.1.0" },
@@ -1092,22 +1092,21 @@ wheels = [
 
 [[package]]
 name = "fastmcp"
-version = "4.1.0"
+version = "3.4.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastmcp-slim", extra = ["client", "server"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c3/c4/fe4e24af2cb03f4701f45634873d87557c2b5d283d287412345345ad0ede/fastmcp-4.1.0.tar.gz", hash = "sha256:7a8bf4e58cc6c2f3a8552b5a7a17ba1e4682b6fd4cafb7f461920a66dbd2499f", size = 42686511, upload-time = "2026-10-08T22:57:05.652Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/58/d7eb02522c126ce5331128cd1dee995deb8169bb0f3a0f406ab43ac3ab39/fastmcp-3.4.9.tar.gz", hash = "sha256:8dd05001a1d17fb7ea732b6d4f21e700af538fcd003b3ed2c9d5aab204df3f28", size = 28864396, upload-time = "2026-10-16T20:47:37.56Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5c/81/77610de5d79187455ec4a4eafdc17942365f1bc4e5850633e50159e9afdc/fastmcp-4.1.0-py3-none-any.whl", hash = "sha256:cf19fd603315b48ef1829c8579431e77793feafdcbed51f0dc5607af10a24e9b", size = 8154, upload-time = "2026-10-08T22:57:02.531Z" },
+    { url = "https://files.pythonhosted.org/packages/33/d6/8e59623576816a2fd007523382a54c0f51a6e9ba40730ed3bce607d77dc3/fastmcp-3.4.9-py3-none-any.whl", hash = "sha256:8ec034ccb896a6b30cef25cbf499d93099482a03acf2c223e7db5531b22e88cb", size = 8019, upload-time = "2026-10-16T20:47:35.482Z" },
 ]
 
 [[package]]
 name = "fastmcp-slim"
-version = "4.1.0"
+version = "3.4.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "mcp-types" },
     { name = "platformdirs" },
     { name = "pydantic", extra = ["email"] },
     { name = "pydantic-settings" },
@@ -1115,17 +1114,16 @@ dependencies = [
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/88/85aafec43ec9940a360d75f2d8e9517eda01ac38b8b1610b0e9e125d61d3/fastmcp_slim-4.1.0.tar.gz", hash = "sha256:390b2b430195e0cdd0327aff80fe5dceb862b2421baf71de6d4eec92f80f99f8", size = 734647, upload-time = "2026-10-08T22:56:40.642Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/06/84b5b0919b61c881bc789c3a8f90e6641967e15b2a7877ca55b115b6b0ee/fastmcp_slim-3.4.9.tar.gz", hash = "sha256:59b4437e85781cdcf96dd912d118f99bd14cd9a0e51f01a91c4120ef2cf8db0f", size = 610012, upload-time = "2026-10-16T20:47:16.176Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/6a/d61e1541f4c65872146a576c1379f6f32013fd8c636bcaf0f8e70a04e533/fastmcp_slim-4.1.0-py3-none-any.whl", hash = "sha256:6edb48a78e508ef5ac691bf2a68f3e5000403773655d859eceea1068b894df4a", size = 911585, upload-time = "2026-10-08T22:56:39.136Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/fa/b574ed084a0319ea60991bf95b0f062e06925399a1ff3b1842658edb59fc/fastmcp_slim-3.4.9-py3-none-any.whl", hash = "sha256:f0442024dcaec56860faeb7863099eacbaa921596c88d5e6f9e7f6adc4c1aca4", size = 785572, upload-time = "2026-10-16T20:47:14.315Z" },
 ]
 
 [package.optional-dependencies]
 client = [
     { name = "authlib" },
-    { name = "beartype", version = "0.23.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.15'" },
     { name = "exceptiongroup" },
-    { name = "httpx2" },
+    { name = "httpx" },
     { name = "mcp" },
     { name = "opentelemetry-api" },
     { name = "py-key-value-aio", extra = ["filetree", "keyring", "memory"] },
@@ -1133,11 +1131,10 @@ client = [
 ]
 server = [
     { name = "authlib" },
-    { name = "beartype", version = "0.23.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.15'" },
     { name = "cyclopts" },
     { name = "exceptiongroup" },
     { name = "griffelib" },
-    { name = "httpx2" },
+    { name = "httpx" },
     { name = "joserfc" },
     { name = "jsonref" },
     { name = "jsonschema-path" },
@@ -2593,15 +2590,15 @@ wheels = [
 
 [[package]]
 name = "mcp"
-version = "2.3.0"
+version = "1.30.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
-    { name = "httpx2" },
+    { name = "httpx" },
+    { name = "httpx-sse" },
     { name = "jsonschema" },
-    { name = "mcp-types" },
-    { name = "opentelemetry-api" },
     { name = "pydantic" },
+    { name = "pydantic-settings" },
     { name = "pyjwt", extra = ["crypto"] },
     { name = "python-multipart" },
     { name = "pywin32", marker = "sys_platform == 'win32'" },
@@ -2611,22 +2608,9 @@ dependencies = [
     { name = "typing-inspection" },
     { name = "uvicorn", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9d/8d/e0d339616f4810e9051d4aba6887afab289ab1f81875fe908b606cdfd0e3/mcp-2.3.0.tar.gz", hash = "sha256:8b147a50441cf059dc88c684e0aeed3687f0aa0f39c6cde7b90330effd2b34d8", size = 4171955, upload-time = "2026-10-02T22:06:56.091Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/93/0142dc84a666daf8ad51a34268f34c12fd6fda4f3810c4be2504eecc8212/mcp-1.30.0.tar.gz", hash = "sha256:445414625fce5c295faa505bb11bacece661ab6f4028d57c935db57820b7a3e4", size = 680511, upload-time = "2026-09-07T14:34:15.845Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/20/d7/4a2878f128df729db3ca04e71bfce26405cc2e0c9ebe19c592feeb4c61b9/mcp-2.3.0-py3-none-any.whl", hash = "sha256:dd0c44c089d16453e8ae31a3877a0054d7a2314caaa81f5e0541b9b1734b2377", size = 368664, upload-time = "2026-10-02T22:06:52.119Z" },
-]
-
-[[package]]
-name = "mcp-types"
-version = "2.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/9e/2d/7c251e34207f6c51000312fc8839111ac45cfe02023f90b44e7f1051dd8e/mcp_types-2.3.0.tar.gz", hash = "sha256:d1e46549edb35ee19a94940fcee6d1addd7e589ab7ea92dda83f5d84781fc362", size = 65898, upload-time = "2026-10-02T22:06:57.863Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ce/48/32583066b155bb5d4507e7887dc88ee23118cc4de8e2a12870c49719e2a8/mcp_types-2.3.0-py3-none-any.whl", hash = "sha256:968efdbdaedfab06adae40d378a34395f1090c5921d4be3c9cde283aaf76d91d", size = 69108, upload-time = "2026-10-02T22:06:54.099Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/f4/e58bc33317c92a0203664daaf00bf6f41166cc0149e5d6870a03f7cd004a/mcp-1.30.0-py3-none-any.whl", hash = "sha256:666edb5009503e1047c9d60346a756f94b261f05cc2625f23d41c728ffc484d0", size = 234581, upload-time = "2026-09-07T14:34:14.266Z" },
 ]
 
 [[package]]
