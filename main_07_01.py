@@ -9,9 +9,7 @@ from langchain.agents import create_agent
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers import Html2TextTransformer
-from langchain_core.messages import (
-    HumanMessage,
-)
+from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -64,10 +62,8 @@ def get_travel_info_vectorstore() -> Chroma:  # H
     global _ti_vectorstore_client
     if _ti_vectorstore_client is None:
         if not os.environ.get("OPENAI_API_KEY"):
-            raise RuntimeError(
-                """Set the OPENAI_API_KEY env 
-                variable and re-run."""
-            )
+            raise RuntimeError("""Set the OPENAI_API_KEY env 
+                variable and re-run.""")
         _ti_vectorstore_client = asyncio.run(build_vectorstore(UK_DESTINATIONS))
     return _ti_vectorstore_client  # I
 
@@ -110,21 +106,23 @@ def search_travel_info(query: str) -> str:  # B
 # C Perform a semantic search on the vectorstore and return the top 4 results
 # D Joins the top 4 results into a single string
 
-async def get_accuweather_tools(): #A
-    mcp_client = MultiServerMCPClient({ #B
-        "accuweather": { #C
-            "url": "http://127.0.0.1:8020/accu-mcp-server",
-            "transport": "streamable_http"
+
+async def get_accuweather_tools():  # A
+    mcp_client = MultiServerMCPClient(
+        {  # B
+            "accuweather": {  # C
+                "url": "http://127.0.0.1:8020/accu-mcp-server",
+                "transport": "streamable_http",
+            }
         }
-    })
-    return await mcp_client.get_tools() #D
+    )
+    return await mcp_client.get_tools()  # D
 
 
-
-#A Define the function to get the AccuWeather tools as an async function
-#B Instantiate the MultiServerMCPClient
-#C Register the AccuWeather MCP server
-#D Return the AccuWeather tools exposed by the MCP server
+# A Define the function to get the AccuWeather tools as an async function
+# B Instantiate the MultiServerMCPClient
+# C Register the AccuWeather MCP server
+# D Return the AccuWeather tools exposed by the MCP server
 
 # ----------------------------------------------------------------------------
 # 5. Simple CLI interface
@@ -153,15 +151,11 @@ async def chat_loop(travel_info_agent):  # A
 
 
 async def main():
-    accuweather_tools = \
-        await get_accuweather_tools() #B
-    tools = [search_travel_info, 
-        *accuweather_tools] #C
-    llm_model = ChatOpenAI( 
-        model="gpt-5-mini",
-        use_responses_api=True) #D
+    accuweather_tools = await get_accuweather_tools()  # B
+    tools = [search_travel_info, *accuweather_tools]  # C
+    llm_model = ChatOpenAI(model="gpt-5-mini", use_responses_api=True)  # D
 
-    travel_info_agent = create_agent( #E
+    travel_info_agent = create_agent(  # E
         model=llm_model,
         tools=tools,
         name="travel_info_agent",
@@ -170,15 +164,15 @@ async def main():
         Only use the tools to find the information you need 
         (including town names).""",
     )
-    await chat_loop(travel_info_agent) #F
+    await chat_loop(travel_info_agent)  # F
 
 
 if __name__ == "__main__":
     asyncio.run(main())  # A
 
-#B - Get the AccuWeather MCP server tools
-#C - Combine the local search_travel_info tool with the AccuWeather MCP server tools
-#D - Instantiate the LLM model
-#E - Create the travel_info_agent
-#F - Start the chat loop
-#G - Run the main function, asyncronously      
+# B - Get the AccuWeather MCP server tools
+# C - Combine the local search_travel_info tool with the AccuWeather MCP server tools
+# D - Instantiate the LLM model
+# E - Create the travel_info_agent
+# F - Start the chat loop
+# G - Run the main function, asyncronously
